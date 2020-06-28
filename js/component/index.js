@@ -78,7 +78,8 @@ export default class Component {
     }
 
     get(name) {
-        return this.data[name]
+        // The .split() stuff is to support dot-notation.
+        return name.split('.').reduce((carry, dotSeperatedSegment) => carry[dotSeperatedSegment], this.data)
     }
 
     set(name, value) {
@@ -366,7 +367,9 @@ export default class Component {
                 return false
             }
 
-            callback(el)
+            if (callback(el) === false) {
+                return false
+            }
         })
     }
 

@@ -230,12 +230,18 @@ HTML;
             }
         }
 
+        $nonce = isset($options['nonce']) ? " nonce=\"{$options['nonce']}\"" : '';
+
         // Adding semicolons for this JavaScript is important,
         // because it will be minified in production.
         return <<<HTML
 {$assetWarning}
 <script src="{$fullAssetPath}" data-turbolinks-eval="false"></script>
-<script data-turbolinks-eval="false">
+<script data-turbolinks-eval="false"{$nonce}>
+    if (window.livewire) {
+        console.warn('Livewire: It looks like Livewire\'s @livewireScripts JavaScript assets have already been loaded. Make sure you aren\'t loading them twice.')
+    }
+
     window.livewire = new Livewire({$jsonEncodedOptions});
     window.livewire_app_url = '{$appUrl}';
     window.livewire_token = '{$csrf}';
